@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Brady.PowerGeneration.Core\Brady.PowerGeneration.Core.csproj" />
+    <ProjectReference Include="..\Brady.PowerGeneration.Infrastructure\Brady.PowerGeneration.Infrastructure.csproj" />
+    <ProjectReference Include="..\Brady.PowerGeneration.Services\Brady.PowerGeneration.Services.csproj" />
+  </ItemGroup>
+
+</Project>
