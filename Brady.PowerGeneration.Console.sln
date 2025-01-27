@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brady.PowerGeneration.Console", "Brady.PowerGeneration\Brady.PowerGeneration.Console.csproj", "{645BCFEE-2022-41F8-A017-BC26CDFBFC2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brady.PowerGeneration.Console", "Brady.PowerGeneration.Console\Brady.PowerGeneration.Console.csproj", "{645BCFEE-2022-41F8-A017-BC26CDFBFC2C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brady.PowerGeneration.Core", "Brady.PowerGeneration.Core\Brady.PowerGeneration.Core.csproj", "{12178F91-929F-437D-A012-9B62FD3AF9D9}"
 EndProject

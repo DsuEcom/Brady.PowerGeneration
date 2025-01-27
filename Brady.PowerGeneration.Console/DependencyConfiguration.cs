@@ -1,55 +1,55 @@
 ﻿using Brady.PowerGeneration.Core.Interfaces;
 using Brady.PowerGeneration.Core.Models;
+using Brady.PowerGeneration.Core.Services.HelperServices;
+using Brady.PowerGeneration.Core.Services.ProcessingServices;
+using Brady.PowerGeneration.Core.Validators;
 using Brady.PowerGeneration.Infrastructure.Configuration;
 using Brady.PowerGeneration.Infrastructure.FileProcessing;
-using Brady.PowerGeneration.Infrastructure.Interfaces;
 using Brady.PowerGeneration.Infrastructure.Repositories;
-using Brady.PowerGeneration.Services.Calculators;
-using Brady.PowerGeneration.Services.Services;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Brady.PowerGeneration.Console
 {
     public static class DependencyConfiguration
     {
-        public static IServiceCollection AddDependencies(
-            this IServiceCollection services,
-            IConfiguration configuration)
+        public static IServiceCollection AddDependencies(this IServiceCollection services,IConfiguration configuration)
         {
-            // Configuration
+            // Bind configuration settings
             services.Configure<PowerGenerationSettings>(
                 configuration.GetSection("PowerGeneration"));
 
-            // XML Processing
-            services.AddScoped<IXmlProcessingStrategy<GenerationReport>, GenerationReportStrategy>();
-            services.AddScoped<IXmlProcessingStrategy<GenerationOutput>, GenerationOutputStrategy>();
-
-            // Calculators
+            // Register Core services
+            services.AddScoped<IGenerationReportProcessor, GenerationReportProcessor>();
             services.AddScoped<IValueFactorProvider, GenerationValueCalculator>();
             services.AddScoped<IEmissionFactorProvider, EmissionsCalculator>();
 
-            // Repositories
-            services.AddScoped<XmlRepository>();
+            services.AddScoped<IXmlDataValidator<GenerationReport>, GenerationReportValidator>();
+            services.AddScoped<IXmlDataValidator<ReferenceData>, ReferenceDataValidator>();
 
-            // Services
-            services.AddScoped<IGenerationReportProcessor, GenerationReportService>();
-
-            // File Monitoring
-            services.AddScoped(typeof(XmlFileMonitor<>));
-            services.AddScoped<IFileMonitor>(sp =>
+            // Register Infrastructure services
+            services.AddScoped<IXmlRepository<GenerationReport>>(sp =>
             {
-                var strategy = sp.GetRequiredService<IXmlProcessingStrategy<GenerationReport>>();
-                var processor = sp.GetRequiredService<IGenerationReportProcessor>();
-
-                return new XmlFileMonitor<GenerationReport>(strategy,
-                    async report => await processor.ProcessReportAsync(report));
+                var logger = sp.GetRequiredService<ILogger<XmlRepository<GenerationReport>>>();
+                var validator = sp.GetRequiredService<IXmlDataValidator<GenerationReport>>();
+                return new XmlRepository<GenerationReport>(logger, validator);
             });
+
+            services.AddScoped<IXmlRepository<GenerationReportDto>>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<XmlRepository<GenerationReportDto>>>();
+                
+                return new XmlRepository<GenerationReportDto>(logger, null!);
+            });
+
+            services.AddScoped<IXmlRepository<ReferenceData>>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<XmlRepository<ReferenceData>>>();
+                var validator = sp.GetRequiredService<IXmlDataValidator<ReferenceData>>();
+                return new XmlRepository<ReferenceData>(logger, validator);
+            });
+            services.AddScoped<IFileMonitor, XmlFileMonitor>();
 
             return services;
         }
