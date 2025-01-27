@@ -8,7 +8,8 @@ namespace Brady.PowerGeneration.Infrastructure.Configuration
 {
     public class PowerGenerationSettings
     {
-        public string InputFolderPath { get; set; }
-        public string OutputFolderPath { get; set; }
+        public required string InputFolderPath { get; set; }
+        public required string OutputFolderPath { get; set; }
+        public required string ReferenceDataPath { get; set; }
     }
 }

@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brady.PowerGeneration.Core"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brady.PowerGeneration.Infrastructure", "Brady.PowerGeneration.Infrastructure\Brady.PowerGeneration.Infrastructure.csproj", "{16171343-989B-4A4F-8564-BF76D47C471C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brady.PowerGeneration.Services", "Brady.PowerGeneration.Services\Brady.PowerGeneration.Services.csproj", "{03FC4651-F6F8-4E1B-9583-10C84272FFEF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brady.PowerGeneration.Tests", "Brady.PowerGeneration.Tests\Brady.PowerGeneration.Tests.csproj", "{1AFD7204-CC78-481D-B0D2-D2431A0AE3B1}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{16171343-989B-4A4F-8564-BF76D47C471C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16171343-989B-4A4F-8564-BF76D47C471C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16171343-989B-4A4F-8564-BF76D47C471C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03FC4651-F6F8-4E1B-9583-10C84272FFEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03FC4651-F6F8-4E1B-9583-10C84272FFEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03FC4651-F6F8-4E1B-9583-10C84272FFEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03FC4651-F6F8-4E1B-9583-10C84272FFEF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1AFD7204-CC78-481D-B0D2-D2431A0AE3B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1AFD7204-CC78-481D-B0D2-D2431A0AE3B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AFD7204-CC78-481D-B0D2-D2431A0AE3B1}.Release|Any CPU.ActiveCfg = Release|Any CPU

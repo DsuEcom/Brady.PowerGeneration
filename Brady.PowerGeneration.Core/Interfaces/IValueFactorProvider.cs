@@ -1,14 +1,11 @@
 ﻿using Brady.PowerGeneration.Core.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Brady.PowerGeneration.Core.Models;
 
 namespace Brady.PowerGeneration.Core.Interfaces
 {
     public interface IValueFactorProvider
     {
-        decimal GetValueFactor(GeneratorType generatorType);
+        decimal GetValueFactor(GeneratorType generatorType, ReferenceData referenceData);
+        decimal CalculateGenerationValue(decimal energy, decimal price, GeneratorType generatorType, ReferenceData referenceData);
     }
 }
