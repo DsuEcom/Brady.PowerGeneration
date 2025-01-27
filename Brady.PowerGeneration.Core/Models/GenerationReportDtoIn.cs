@@ -8,7 +8,7 @@ namespace Brady.PowerGeneration.Core.Models
     /// Contains collections of different types of power generators.
     /// </summary>
     [XmlRoot("GenerationReport")]
-    public class GenerationReport
+    public class GenerationReportDtoIn
     {
         // Note that we don't initialize these properties with new instances
         // because the XML serializer will handle instantiation

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Brady.PowerGeneration.Core.Validators
 {
-    public class GenerationReportValidator : IXmlDataValidator<GenerationReport>
+    public class GenerationReportValidator : IXmlDataValidator<GenerationReportDtoIn>
     {
         private readonly ILogger<GenerationReportValidator> _logger;
 
@@ -14,7 +14,7 @@ namespace Brady.PowerGeneration.Core.Validators
             _logger = logger;
         }
 
-        public Task ValidateAsync(GenerationReport report)
+        public Task ValidateAsync(GenerationReportDtoIn report)
         {
             _logger.LogDebug("Beginning validation of generation report");
 

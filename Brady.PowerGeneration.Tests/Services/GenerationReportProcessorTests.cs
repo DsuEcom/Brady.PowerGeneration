@@ -11,9 +11,9 @@ namespace Brady.PowerGeneration.Tests.Services
     {
         private readonly Mock<IValueFactorProvider> _valueCalculatorMock;
         private readonly Mock<IEmissionFactorProvider> _emissionsCalculatorMock;
-        private readonly Mock<IXmlRepository<GenerationReport>> _generationReportRepositoryMock;
+        private readonly Mock<IXmlRepository<GenerationReportDtoIn>> _generationReportRepositoryMock;
         private readonly Mock<IXmlRepository<ReferenceData>> _referenceRepositoryMock;
-        private readonly Mock<IXmlRepository<GenerationReportDto>> _outputRepositoryMock;
+        private readonly Mock<IXmlRepository<GenerationReportDtoOut>> _outputRepositoryMock;
         private readonly Mock<ILogger<GenerationReportProcessor>> _loggerMock;
         private readonly GenerationReportProcessor _processor;
 
@@ -22,9 +22,9 @@ namespace Brady.PowerGeneration.Tests.Services
             // Initialize all mocks
             _valueCalculatorMock = new Mock<IValueFactorProvider>();
             _emissionsCalculatorMock = new Mock<IEmissionFactorProvider>();
-            _generationReportRepositoryMock = new Mock<IXmlRepository<GenerationReport>>();
+            _generationReportRepositoryMock = new Mock<IXmlRepository<GenerationReportDtoIn>>();
             _referenceRepositoryMock = new Mock<IXmlRepository<ReferenceData>>();
-            _outputRepositoryMock = new Mock<IXmlRepository<GenerationReportDto>>();
+            _outputRepositoryMock = new Mock<IXmlRepository<GenerationReportDtoOut>>();
             _loggerMock = new Mock<ILogger<GenerationReportProcessor>>();
 
             // Create processor instance with mocked dependencies
@@ -77,7 +77,7 @@ namespace Brady.PowerGeneration.Tests.Services
             // Assert
             _outputRepositoryMock.Verify(x =>
                 x.SaveAsync(
-                    It.Is<GenerationReportDto>(dto => ValidateGenerationReportDto(dto)),
+                    It.Is<GenerationReportDtoOut>(dto => ValidateGenerationReportDto(dto)),
                     outputFilePath),
                 Times.Once);
         }
@@ -140,13 +140,13 @@ namespace Brady.PowerGeneration.Tests.Services
             // Assert
             _outputRepositoryMock.Verify(x =>
                 x.SaveAsync(
-                    It.Is<GenerationReportDto>(dto =>
+                    It.Is<GenerationReportDtoOut>(dto =>
                         dto.Totals.Generator.Any(g => g.Total == expectedGenerationValue)),
                     outputFilePath),
                 Times.Once);
         }
 
-        private bool ValidateGenerationReportDto(GenerationReportDto dto)
+        private bool ValidateGenerationReportDto(GenerationReportDtoOut dto)
         {
             return dto != null
                 && dto.Totals?.Generator != null
@@ -154,9 +154,9 @@ namespace Brady.PowerGeneration.Tests.Services
                 && dto.ActualHeatRates?.ActualHeatRate != null;
         }
 
-        private GenerationReport CreateSampleGenerationReport()
+        private GenerationReportDtoIn CreateSampleGenerationReport()
         {
-            return new GenerationReport
+            return new GenerationReportDtoIn
             {
                 Wind = new Wind
                 {

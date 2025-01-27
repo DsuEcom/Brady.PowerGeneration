@@ -9,18 +9,18 @@ namespace Brady.PowerGeneration.Core.Services.ProcessingServices
         private readonly IValueFactorProvider _valueCalculator;
         private readonly IEmissionFactorProvider _emissionsCalculator;
 
-        private readonly IXmlRepository<GenerationReport> _generationReportRepository;
+        private readonly IXmlRepository<GenerationReportDtoIn> _generationReportRepository;
         private readonly IXmlRepository<ReferenceData> _referenceRepository;
-        private readonly IXmlRepository<GenerationReportDto> _outputRepository;
+        private readonly IXmlRepository<GenerationReportDtoOut> _outputRepository;
 
         private readonly ILogger<GenerationReportProcessor> _logger;
 
         public GenerationReportProcessor(
             IValueFactorProvider valueCalculator,
             IEmissionFactorProvider emissionsCalculator,
-            IXmlRepository<GenerationReport> generationReportRepository,
+            IXmlRepository<GenerationReportDtoIn> generationReportRepository,
             IXmlRepository<ReferenceData> referenceRepository,
-            IXmlRepository<GenerationReportDto> outputRepository,
+            IXmlRepository<GenerationReportDtoOut> outputRepository,
             ILogger<GenerationReportProcessor> logger)
         {
             _valueCalculator = valueCalculator;
@@ -51,9 +51,9 @@ namespace Brady.PowerGeneration.Core.Services.ProcessingServices
             }
         }
 
-        private GenerationReportDto CreateGenerationReportDto(GenerationReport report, ReferenceData referenceData)
+        private GenerationReportDtoOut CreateGenerationReportDto(GenerationReportDtoIn report, ReferenceData referenceData)
         {
-            return new GenerationReportDto
+            return new GenerationReportDtoOut
             {
                 Totals = new TotalsContainer
                 {
@@ -74,7 +74,7 @@ namespace Brady.PowerGeneration.Core.Services.ProcessingServices
         /// Calculates the total generation value for each generator in the report.
         /// The total is calculated by summing (Energy × Price × ValueFactor) for each day.
         /// </summary>
-        private List<GeneratorTotal> CalculateGeneratorTotals(GenerationReport report, ReferenceData referenceData)
+        private List<GeneratorTotal> CalculateGeneratorTotals(GenerationReportDtoIn report, ReferenceData referenceData)
         {
             return report.GetAllGenerators()
                 .Select(generator =>
@@ -100,11 +100,11 @@ namespace Brady.PowerGeneration.Core.Services.ProcessingServices
         /// Identifies the generator with the highest emissions for each day and calculates its emission value.
         /// Only considers fossil fuel generators (Gas and Coal) for emissions calculations.
         /// </summary>
-        private List<MaxEmissionGenerator> CalculateMaxEmissions(GenerationReport report, ReferenceData referenceData)
+        private List<MaxEmissionGenerator> CalculateMaxEmissions(GenerationReportDtoIn report, ReferenceData referenceData)
         {
             return report.GetAllGenerators()
              .SelectMany(g => g.Generation!.Day.Select(d => new { Generator = g, Day = d }))
-             .GroupBy(x => x.Day.Date.Date)
+             .GroupBy(x => x.Day.Date.ToUniversalTime().Date)
              .Select(group =>
              {
                  var maxEmission = group
@@ -117,7 +117,7 @@ namespace Brady.PowerGeneration.Core.Services.ProcessingServices
                              x.Generator.GetGeneratorType(),
                              referenceData);
 
-                         return new { x.Generator.Name, x.Day.Date, Emission = emission };
+                         return new { x.Generator.Name, Date = x.Day.Date.ToUniversalTime(), Emission = emission };
                      })
                      .MaxBy(x => x.Emission);
 
@@ -138,7 +138,7 @@ namespace Brady.PowerGeneration.Core.Services.ProcessingServices
         /// Heat Rate = TotalHeatInput / ActualNetGeneration
         /// Only applies to coal generators.
         /// </summary>
-        private List<ActualHeatRate> CalculateHeatRates(GenerationReport report)
+        private List<ActualHeatRate> CalculateHeatRates(GenerationReportDtoIn report)
         {
             var heatRates = new List<ActualHeatRate>();
 

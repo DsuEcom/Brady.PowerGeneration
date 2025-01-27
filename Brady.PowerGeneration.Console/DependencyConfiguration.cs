@@ -25,22 +25,22 @@ namespace Brady.PowerGeneration.Console
             services.AddScoped<IValueFactorProvider, GenerationValueCalculator>();
             services.AddScoped<IEmissionFactorProvider, EmissionsCalculator>();
 
-            services.AddScoped<IXmlDataValidator<GenerationReport>, GenerationReportValidator>();
+            services.AddScoped<IXmlDataValidator<GenerationReportDtoIn>, GenerationReportValidator>();
             services.AddScoped<IXmlDataValidator<ReferenceData>, ReferenceDataValidator>();
 
             // Register Infrastructure services
-            services.AddScoped<IXmlRepository<GenerationReport>>(sp =>
+            services.AddScoped<IXmlRepository<GenerationReportDtoIn>>(sp =>
             {
-                var logger = sp.GetRequiredService<ILogger<XmlRepository<GenerationReport>>>();
-                var validator = sp.GetRequiredService<IXmlDataValidator<GenerationReport>>();
-                return new XmlRepository<GenerationReport>(logger, validator);
+                var logger = sp.GetRequiredService<ILogger<XmlRepository<GenerationReportDtoIn>>>();
+                var validator = sp.GetRequiredService<IXmlDataValidator<GenerationReportDtoIn>>();
+                return new XmlRepository<GenerationReportDtoIn>(logger, validator);
             });
 
-            services.AddScoped<IXmlRepository<GenerationReportDto>>(sp =>
+            services.AddScoped<IXmlRepository<GenerationReportDtoOut>>(sp =>
             {
-                var logger = sp.GetRequiredService<ILogger<XmlRepository<GenerationReportDto>>>();
+                var logger = sp.GetRequiredService<ILogger<XmlRepository<GenerationReportDtoOut>>>();
                 
-                return new XmlRepository<GenerationReportDto>(logger, null!);
+                return new XmlRepository<GenerationReportDtoOut>(logger, null!);
             });
 
             services.AddScoped<IXmlRepository<ReferenceData>>(sp =>

@@ -10,14 +10,12 @@ public class Program
     {
         try
         {
-            // We create a host that will manage our application's lifecycle
             var host = CreateHostBuilder(args).Build();
 
             // Log application startup
             var logger = host.Services.GetRequiredService<ILogger<Program>>();
             logger.LogInformation("Power Generation Monitor starting...");
 
-            // Run the application until it's terminated
             await host.RunAsync();
         }
         catch (Exception ex)

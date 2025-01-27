@@ -1,5 +1,6 @@
 ﻿using Brady.PowerGeneration.Core.Interfaces;
 using Microsoft.Extensions.Logging;
+using System.Xml;
 
 namespace Brady.PowerGeneration.Infrastructure.FileProcessing
 {
@@ -160,6 +161,11 @@ namespace Brady.PowerGeneration.Infrastructure.FileProcessing
                 }
 
                 var fileName = Path.GetFileName(filePath);
+                if (!IsGenerationReport(filePath))
+                {
+                    _logger.LogWarning("File {File} is not a Generation Report. Skipping processing.", fileName);
+                    return;
+                }
                 _logger.LogInformation("Processing file: {File}", fileName);
 
                 var outputFileName = Path.GetFileNameWithoutExtension(fileName) + "-Result.xml";
@@ -183,6 +189,37 @@ namespace Brady.PowerGeneration.Infrastructure.FileProcessing
             }
             catch (IOException)
             {
+                return false;
+            }
+        }
+
+        private bool IsGenerationReport(string filePath)
+        {
+            try
+            {
+                using var fileStream = File.OpenRead(filePath);
+                using var reader = XmlReader.Create(fileStream);
+
+                // Move to the root element
+                while (reader.Read())
+                {
+                    if (reader.NodeType == XmlNodeType.Element)
+                    {
+                        // Check if root element is "GenerationReport"
+                        return reader.Name == "GenerationReport";
+                    }
+                }
+
+                return false;
+            }
+            catch (XmlException ex)
+            {
+                _logger.LogWarning(ex, "File {File} is not a valid XML file", Path.GetFileName(filePath));
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking file type for {File}", Path.GetFileName(filePath));
                 return false;
             }
         }

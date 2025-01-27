@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
 
 [XmlRoot("GenerationOutput")]
-public class GenerationReportDto
+public class GenerationReportDtoOut
 {
     [XmlElement("Totals")]
     public TotalsContainer Totals { get; set; } = new();
